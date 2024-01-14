@@ -137,10 +137,11 @@ export async function DELETE (
     {params}: {params: {storeId: string, productId: string}}
 ) {
     try {
+        debugger
         const {userId} = auth();
 
         if(!userId) {
-            return new NextResponse("Unauthenticated", {status: 401});
+            return new NextResponse("Unauthenticated", {status: 403});
         }
 
         if(!params.productId) {
@@ -155,13 +156,13 @@ export async function DELETE (
         })
 
         if(!storeByUserId) {
-            return new NextResponse("Unauthorized", {status: 403});
+            return new NextResponse("Unauthorized", {status: 405});
         }
 
         const product = await prismadb.product.delete({
             where: {
                 id: params.productId
-            }
+            },
         });
 
         return NextResponse.json(product);
